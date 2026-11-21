@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 98%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 6% 6%;
+    --foreground: 210 20% 92%;
+    --card: 240 5% 8%;
+    --card-foreground: 210 20% 92%;
+    --popover: 240 5% 8%;
+    --popover-foreground: 210 20% 92%;
+    --primary: 210 20% 92%;
+    --primary-foreground: 240 6% 6%;
+    --secondary: 240 4% 14%;
+    --secondary-foreground: 210 20% 92%;
+    --muted: 240 4% 14%;
+    --muted-foreground: 215 15% 55%;
+    --accent: 240 4% 14%;
+    --accent-foreground: 210 20% 92%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 92%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 215 20% 65%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* 고정 헤더에 섹션 제목이 가려지지 않도록 */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 한글이 단어 중간에서 끊기지 않도록 (긴 URL·영문은 넘치지 않게 강제 줄바꿈 허용) */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    min-height: 100vh;
+    overflow-x: clip;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+::selection {
+  background: hsl(var(--foreground) / 0.15);
+  color: inherit;
+}
+
+/* 커스텀 나비 커서가 실제로 켜졌을 때만 기본 커서 숨김 (JS 실패/터치 기기에서는 기본 커서 유지) */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* Container */
+.container {
+  @apply mx-auto px-4 md:px-6 lg:px-8;
+  max-width: 1280px;
+  width: 100%;
+}
+
+/* Animations */
+@keyframes float-butterfly {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+.animate-float-butterfly { animation: float-butterfly 2s ease-in-out infinite; }
+
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+.animate-bounce-soft { animation: bounce-soft 2s ease-in-out infinite; }
+
+@keyframes intro-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* 무한 가로 스크롤 (내용을 2번 반복해 두고 -50% 이동) */
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes marquee-reverse {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+.animate-marquee,
+.animate-scroll,
+.animate-scroll-reverse {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+}
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-scroll { animation: marquee 30s linear infinite; }
+.animate-scroll-reverse { animation: marquee-reverse 30s linear infinite; }
+.animate-scroll:hover,
+.animate-scroll-reverse:hover {
+  animation-play-state: paused;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground) / 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground) / 0.25);
+}
+
+/* 움직임 줄이기 설정을 켠 사용자에게는 반복 애니메이션 정지 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-marquee,
+  .animate-scroll,
+  .animate-scroll-reverse,
+  .animate-float-butterfly,
+  .animate-bounce-soft {
+    animation: none;
+  }
+}
