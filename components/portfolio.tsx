@@ -197,6 +197,38 @@ function CaseStudy({ project: p, onOpenPdf }: { project: Project; onOpenPdf: (ur
         ))}
       </div>
 
+      {/* 핵심 설계 포인트 */}
+      {p.highlights && (
+        <div className="mt-12">
+          <Label>{p.highlights.label}</Label>
+          <div className={`mt-5 grid gap-4 ${p.highlights.items.length === 4 ? "md:grid-cols-2 xl:grid-cols-4" : "md:grid-cols-3"}`}>
+            {p.highlights.items.map((h, hi) => (
+              <div key={h.title} className="flex flex-col rounded-2xl border border-foreground/10 bg-background/60 p-6">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-sm font-bold" style={{ color: p.accent }}>{String(hi + 1).padStart(2, "0")}</span>
+                  <span className="rounded-full border border-foreground/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/55">{h.tag}</span>
+                </div>
+                <h4 className="mt-4 text-xl font-bold tracking-tight">{h.title}</h4>
+                <p className="mt-2 text-[15px] leading-relaxed text-foreground/70">{h.desc}</p>
+                {h.points && (
+                  <ul className="mt-4 space-y-2 border-t border-foreground/10 pt-4">
+                    {h.points.map((t) => (
+                      <li key={t} className="relative pl-4 text-sm leading-relaxed text-foreground/70">
+                        <span className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full" style={{ background: p.accent }} />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 시스템 간 연동 시퀀스 */}
+      {p.flow && <FlowDiagram flow={p.flow} accent={p.accent} />}
+
       {/* 묶음 카드: 하위 프로젝트별 결과물 · 문서 · GitHub */}
       {p.builds && p.builds.length > 0 && (
         <div className="mt-12">
@@ -265,7 +297,7 @@ function CaseStudy({ project: p, onOpenPdf }: { project: Project; onOpenPdf: (ur
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               {p.shots.map((s) => (
                 <figure key={s.src}>
-                  <a href={s.src} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-xl bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
+                  <a href={s.full ?? s.src} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-xl bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
                     <div className="relative aspect-[16/10]">
                       <Image src={s.src} alt={s.caption} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover object-top transition-transform duration-700 group-hover/shot:scale-105" />
                     </div>
@@ -282,10 +314,10 @@ function CaseStudy({ project: p, onOpenPdf }: { project: Project; onOpenPdf: (ur
       {p.screens && p.screens.length > 0 && (
         <div className="mt-12">
           <div className="flex flex-wrap items-center gap-3">
-            <Label>Screen Design · {p.screens.length}개 화면 (FID 표시)</Label>
+            <Label>Screen Design · {p.screens.filter((s) => !s.src.includes("ERD")).length}개 화면 + ERD (FID 표시)</Label>
             <ConfidentialNote />
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-5">
             {p.screens.map((s) => (
               <figure key={s.src}>
                 <a href={s.src} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-lg bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
@@ -327,10 +359,57 @@ function CaseStudy({ project: p, onOpenPdf }: { project: Project; onOpenPdf: (ur
   )
 }
 
-function ConfidentialNote() {
+function FlowDiagram({ flow, accent }: { flow: NonNullable<Project["flow"]>; accent: string }) {
+  return (
+    <div className="mt-12">
+      <div className="flex flex-wrap items-center gap-3">
+        <Label>{flow.title}</Label>
+        {flow.note && <ConfidentialNote text={flow.note} />}
+      </div>
+      <div className="mt-5 grid gap-3 md:grid-cols-[150px_1fr_150px] md:gap-5">
+        <div className="flex items-center justify-center rounded-2xl bg-foreground px-4 py-4 text-center text-background md:py-0">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-widest opacity-50">Client</div>
+            <div className="mt-1 text-lg font-bold">{flow.left}</div>
+          </div>
+        </div>
+        <ol className="space-y-2.5">
+          {flow.steps.map((s, i) => (
+            <li key={s.name} className="grid grid-cols-[36px_1fr] items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: accent }}>{i + 1}</span>
+              <div className="rounded-xl border border-foreground/10 bg-background/60 px-4 py-3">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-bold tracking-tight">{s.name}</span>
+                  <span className="whitespace-nowrap text-[11px] font-bold tracking-wider" style={{ color: accent }}>
+                    {s.dir === "out" ? `${flow.left} → WIPS` : `WIPS → ${flow.left}`}
+                  </span>
+                </div>
+                <div className="relative my-2 h-px" style={{ background: s.dir === "out" ? accent : `repeating-linear-gradient(90deg, ${accent} 0 8px, transparent 8px 13px)` }} aria-hidden="true">
+                  <span
+                    className="absolute -top-[4px] border-y-[4.5px] border-y-transparent"
+                    style={s.dir === "out" ? { right: 0, borderLeft: `8px solid ${accent}` } : { left: 0, borderRight: `8px solid ${accent}` }}
+                  />
+                </div>
+                <p className="text-sm leading-relaxed text-foreground/65">{s.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <div className="flex items-center justify-center rounded-2xl px-4 py-4 text-center text-white md:py-0" style={{ background: accent }}>
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-widest opacity-70">Service</div>
+            <div className="mt-1 text-lg font-bold">{flow.right}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ConfidentialNote({ text = "Confidential · 사내 문서라 블러 처리 — 원본은 면접에서 시연 가능" }: { text?: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-background/60 px-3 py-1 text-xs text-foreground/60">
-      <Lock className="h-3 w-3" /> Confidential · 사내 문서라 블러 처리 — 원본은 면접에서 시연 가능
+      <Lock className="h-3 w-3" /> {text}
     </span>
   )
 }

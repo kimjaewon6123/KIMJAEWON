@@ -1,5 +1,13 @@
 export type Metric = { value: string; unit?: string; label: string }
-export type Shot = { src: string; caption: string; kind?: "wide" | "phone" }
+/** full: 클릭 시 여는 원본 크기 이미지 (없으면 src) */
+export type Shot = { src: string; caption: string; kind?: "wide" | "phone"; full?: string }
+
+/** 핵심 설계 포인트 카드 (로직·규격 원칙) */
+export type Highlight = { tag: string; title: string; desc: string; points?: string[] }
+
+/** 시스템 간 연동 단계 (시퀀스) */
+export type FlowStep = { name: string; dir: "out" | "in"; desc: string }
+export type Flow = { title: string; left: string; right: string; steps: FlowStep[]; note?: string }
 
 export type Project = {
   id: string
@@ -25,6 +33,10 @@ export type Project = {
   confidential?: boolean
   /** 사내 화면설계 — 화면코드(FID) 표시 + 내용 블러 */
   screens?: Shot[]
+  /** 핵심 설계 포인트 */
+  highlights?: { label: string; items: Highlight[] }
+  /** 연동 시퀀스 */
+  flow?: Flow
   /** 여러 개의 작은 프로젝트를 한 카드로 묶을 때 — 각자 문서·GitHub를 따로 가짐 */
   builds?: Build[]
 }
@@ -43,22 +55,26 @@ export type Build = {
 
 /** 상표 연차료 — 이슈별로 바뀐 화면 (Alt+I 화면코드 표시, 내용 블러) */
 export const tmScreens: Shot[] = [
-  { src: "/wips/scr-ITM-019.webp", caption: "신건확인(상표) · 신규" },
-  { src: "/wips/scr-ITM-002.webp", caption: "신건입력 · 수정" },
-  { src: "/wips/scr-SCH-004.webp", caption: "건상세 · POA 발송·이력" },
-  { src: "/wips/scr-ITM-008.webp", caption: "POA 발송 메일 · 수정" },
-  { src: "/wips/scr-SCH-014.webp", caption: "POA 발송·회신 추적 · 신규" },
-  { src: "/wips/scr-SCH-015.webp", caption: "POA 발송 생성 · 신규" },
-  { src: "/wips/scr-SCH-013.webp", caption: "POA 회신 등록 · 신규" },
-  { src: "/wips/scr-PAY-001.webp", caption: "인보이스 접수 · 수정" },
-  { src: "/wips/scr-PAY-017.webp", caption: "상표 인보이스 입력 · 신규" },
-  { src: "/wips/scr-PAY-015.webp", caption: "기타비용 · 신규" },
-  { src: "/wips/scr-PAY-016.webp", caption: "기타비용 입력 · 신규" },
-  { src: "/wips/scr-SCH-008.webp", caption: "연차상세(상표) · 관납료 계산" },
-  { src: "/wips/scr-MGR-015.webp", caption: "국가 설정 · 갱신·관납료 기준" },
-  { src: "/wips/scr-MGR-018.webp", caption: "POA 서식관리 · 신규" },
-  { src: "/wips/scr-MGR-019.webp", caption: "POA 서식 등록 · 신규" },
-  { src: "/wips/scr-MGR-020.webp", caption: "고객 상세 · 수수료 기준" },
+  { src: "/wips/scr-ITM-019.webp", caption: "ITM-019 신건확인(상표) · 신규" },
+  { src: "/wips/scr-ITM-002.webp", caption: "ITM-002 신건입력 · 수정" },
+  { src: "/wips/scr-SCH-004.webp", caption: "SCH-004 건상세 · POA 이력 · 수정" },
+  { src: "/wips/scr-SCH-008.webp", caption: "SCH-008 연차상세(상표) · 수정" },
+  { src: "/wips/scr-SCH-017.webp", caption: "SCH-017 리마인더 회신 · 분할 · 수정" },
+  { src: "/wips/scr-SCH-014.webp", caption: "SCH-014 POA 발송·회신 · 신규" },
+  { src: "/wips/scr-SCH-015.webp", caption: "SCH-015 POA 생성 · 신규" },
+  { src: "/wips/scr-SCH-016.webp", caption: "SCH-016 POA 독촉 일괄발송 · 신규" },
+  { src: "/wips/scr-SCH-013.webp", caption: "SCH-013 POA 회신 등록 · 신규" },
+  { src: "/wips/scr-ITM-008.webp", caption: "ITM-008 POA 발송 메일 · 수정" },
+  { src: "/wips/scr-PAY-001.webp", caption: "PAY-001 인보이스 접수 · 수정" },
+  { src: "/wips/scr-PAY-002.webp", caption: "PAY-002 인보이스 입력 · 수정" },
+  { src: "/wips/scr-PAY-017.webp", caption: "PAY-017 상표 인보이스 입력 · 신규" },
+  { src: "/wips/scr-PAY-015.webp", caption: "PAY-015 기타비용 · 신규" },
+  { src: "/wips/scr-PAY-016.webp", caption: "PAY-016 기타비용 입력 · 신규" },
+  { src: "/wips/scr-MGR-015.webp", caption: "MGR-015 국가 설정 · 상표 기준 · 수정" },
+  { src: "/wips/scr-MGR-018.webp", caption: "MGR-018 POA 서식관리 · 신규" },
+  { src: "/wips/scr-MGR-019.webp", caption: "MGR-019 POA 서식 등록 · 신규" },
+  { src: "/wips/scr-MGR-020.webp", caption: "MGR-020 고객 상세 · 수수료 · 수정" },
+  { src: "/wips/scr-ERD.webp", caption: "ERD 상표 추가항목 · 참고" },
 ]
 
 export const projects: Project[] = [
@@ -72,69 +88,135 @@ export const projects: Project[] = [
     accent: "#1677FF",
     image: "/work/tm-overview.webp",
     summary:
-      "특허·실용신안·디자인만 관리하던 연차료 서비스에 상표 갱신 업무를 통합하는 프로젝트를 혼자 맡아 기획하고 있습니다. 실제 운영 중인 연차료 시스템 화면을 그대로 기반 삼아 HTML 인터랙티브 기획안을 직접 만들어, 개발자와 현업이 화면을 눌러보며 요구사항을 확인할 수 있게 했습니다.",
+      "특허·실용신안·디자인만 관리하던 연차료 서비스에 상표 갱신 업무를 통합하는 프로젝트를 혼자 맡아 기획하고 있습니다. 실제 운영 중인 시스템 화면을 기반으로 HTML 인터랙티브 기획안을 만들고, 요구사항을 11개 이슈 · 140개 세부 규칙으로 쪼개 화면의 기능 ID(FID)와 1:1로 연결했습니다. 화면에서 끝내지 않고 상표 데이터가 저장될 DB 구조까지 ERD와 대조했습니다.",
     metrics: [
-      { value: "22", unit: "개", label: "화면 설계 (신규·수정)" },
-      { value: "10", unit: "건", label: "이슈 단위 요구사항 정의" },
-      { value: "21", unit: "단계", label: "연차료 업무 프로세스 재정의" },
+      { value: "19", unit: "개", label: "화면 설계 (신규 10 · 수정 9)" },
+      { value: "11", unit: "건", label: "이슈 단위 요구사항 정의" },
+      { value: "140", unit: "개", label: "기능 ID에 연결한 세부 규칙" },
     ],
     problem: [
-      "상표는 연차가 아니라 국가별 갱신 주기·류 수·지정상품 개수로 비용이 정해져, 기존 특실디 구조로는 처리 불가",
-      "국가마다 다른 POA·공증·사용선언 요건과 공증료·우편료 같은 부대비용이 수기·개별 관리",
+      "상표는 ‘연차’가 아니라 국가별 갱신 주기 · 류 수 · 지정상품 개수로 비용이 정해져, 기존 특실디 구조로는 처리 불가",
+      "국가마다 다른 POA · 공증 · 사용선언 요건과 공증비 · 우편료 같은 부대비용이 수기 · 개별 관리",
+      "ERD의 권리구분 코드부터 특허·실용·디자인뿐 — 상표 데이터를 담을 코드 · 컬럼 · 테이블 부재",
     ],
     approach: [
-      "21단계 업무 프로세스에서 상표 영향 단계(회차 생성·POA·인보이스·청구)만 표시해 변경 범위 최소화",
-      "요구사항을 10개 ISSUE로 쪼개 이슈별 기준 · 관련 화면 · 기능 ID를 1:1로 연결",
-      "해외비용구조 엑셀을 분석해 국가별 분기 없이 쓰는 ‘류 범위 × 금액’ 공통 계산식 설계",
+      "21단계 업무 프로세스는 유지하고 상표 영향 단계(회차 생성 · POA · 인보이스 · 청구)만 표시해 변경 범위 최소화",
+      "‘회차’ 단위와 공통 공식을 정의해 국가 설정값(처리종류 · 최초 · 주기)만으로 날짜 · 회차 계산",
+      "해외비용구조 엑셀에서 공통 구조를 찾아 국가별 분기 없는 ‘류 범위 × 금액’ 계산식 설계",
+      "POA 진행상태를 기한 · 수령 서류로 자동 판정하고, 회신 완료 전엔 납부지시를 차단",
     ],
     result: [
-      "실제 시스템 기반 HTML 기획안 + 기능명세서로 화면 22개 정의 (v0.2 진행 중)",
-      "POA 진행상태 자동 판정, KR 분할납부, 회차 계산 등 예외 규칙을 명세 단계에서 확정",
+      "HTML 기획안 + 기능명세서로 화면 19개 · 세부 규칙 140개 정의 (v0.2)",
+      "ERD 영향 분석: 기존 15개 테이블 · 56개 컬럼 추가, 신규 테이블 6개, 코드 19건을 개발 전에 전달",
+      "상표 관납료 기준표 202개 관납료번호 · 423행을 초기 데이터로 정리",
     ],
     shots: [
-      { src: "/work/tm-overview.webp", caption: "기획안 — 서비스 개요 · 기존 권리와의 차이" },
-      { src: "/work/tm-process.webp", caption: "21단계 업무 프로세스 · 상표 영향 단계 표시" },
-      { src: "/work/tm-issue.webp", caption: "이슈별 화면설계 — 기준 · 관련 화면 · 기능 ID" },
+      { src: "/work/tm-overview.webp", full: "/wips/tm-overview-full.webp", caption: "서비스 개요 — 기존 권리와 상표의 차이" },
+      { src: "/work/tm-process.webp", full: "/wips/tm-process-full.webp", caption: "21단계 업무 프로세스 · 상표 영향 단계 표시" },
+      { src: "/work/tm-renewal.webp", full: "/wips/tm-renewal-full.webp", caption: "ISSUE-02 갱신 회차 · 분할납부 규칙" },
+      { src: "/work/tm-status.webp", full: "/wips/tm-status-full.webp", caption: "ISSUE-05 POA 진행상태 자동 판정" },
+      { src: "/work/tm-cost.webp", full: "/wips/tm-cost-full.webp", caption: "ISSUE-09 ‘류 범위 × 금액’ 비용 계산식" },
+      { src: "/work/tm-erd.webp", full: "/wips/tm-erd-full.webp", caption: "ISSUE-11 ERD 영향 분석 (물리명 블러)" },
     ],
-    tags: ["B2B 기능 확장", "단독 기획", "HTML 프로토타입 기획안", "업무 프로세스 설계", "비용 계산 로직", "예외 규칙 정의"],
-    tech: "HTML · CSS · JS 프로토타입, Excel 기능명세서, KIPRIS 데이터",
+    highlights: {
+      label: "Key Logic",
+      items: [
+        {
+          tag: "ISSUE-02 · 규칙 36개",
+          title: "‘연차’ 대신 ‘회차’를 정의",
+          desc: "상표는 국가별 주기(보통 10년)마다 갱신하고 미국처럼 사용선언이 따로 있는 나라도 있어, 국가 설정값만으로 날짜가 계산되게 만들었습니다.",
+          points: [
+            "회차 = ROUND(만료일 − 기준일)년 + 1 ~ + 갱신 주기 (예: 2016 등록 · 2026 만료 → 11-20)",
+            "KR 분할납부: 21-30 → 21-25 (1/2) + 지방세 / 26-30 (2/2) 마감 +5년",
+            "갱신·사용선언 회신 N, 무회신 마감 경과 등 예외를 먼저 정의",
+          ],
+        },
+        {
+          tag: "ISSUE-09 · 규칙 14개",
+          title: "‘류 범위 × 금액’ 공통 계산식",
+          desc: "나라마다 금액은 달라도 ‘몇 류까지는 기본료, 그 뒤로는 류마다 추가’ 구조는 같다는 점을 찾아 국가별 분기를 없앴습니다.",
+          points: [
+            "대한민국 3개 류(상품 9 · 20 · 15개) → 201,000 + 221,000 + 211,000 + 지방세 9,120 = 642,120원",
+            "독일 1-1 886 / 2-3 0 / 4-45 307 → 5개 류 = 1,500 USD",
+            "류 범위는 1-1로 시작해 45류까지 빈 곳·겹침 없이 이어져야 저장",
+          ],
+        },
+        {
+          tag: "ISSUE-03~06 · 규칙 51개",
+          title: "POA 상태는 사람이 바꾸지 않는다",
+          desc: "권리만료일에서 거꾸로 기한을 계산하고, 진행상태를 날짜와 수령 서류로 매일 자동 판정합니다.",
+          points: [
+            "대리인 전달마감 = 만료 45일 전, 고객 회신기한 = 그 14일 전",
+            "회신 완료 > 마감 초과 > 독촉 필요 > 고객사 확인중 > 요청 완료",
+            "POA 필수 국가는 회신 완료 전 납부지시 목록에서 제외 — 서류 없는 납부 요청 차단",
+          ],
+        },
+      ],
+    },
+    tags: ["B2B 기능 확장", "단독 기획", "HTML 프로토타입 기획안", "업무 규칙 설계", "비용 계산 로직", "ERD 영향 분석"],
+    tech: "HTML · CSS · JS 프로토타입, Excel 기능명세서, ERD(논리모델), KIPRIS 데이터",
     screens: tmScreens,
+    confidential: true,
   },
   {
     id: "wips",
     client: "(주) 윕스 · 실무",
-    title: "WIPS 시스템 연동 및 운영 고도화",
-    subtitle: "IPAZON – 연차료 서비스 통합 연동",
+    title: "IPAZON · 한국타이어 API 연동 & 운영",
+    subtitle: "IPAZON 시스템 연동 · 고객사 연계 API 규격 · ITS 운영 고도화",
     period: "2025.07 – 현재",
-    role: "PM · 서비스 기획 총괄",
+    role: "PM · 서비스 기획",
     accent: "#F0574D",
     image: "/WIP.webp",
     summary:
-      "글로벌 특허 관리 시스템(IPAZON)과 연차료 납부 서비스 간의 데이터 연동 기획 및 운영 고도화를 리딩했습니다. 특허 데이터가 유실 없이 오가도록 API 명세를 설계하고, 기준이 없던 이슈 트래킹(ITS) 프로세스를 체계화했습니다.",
+      "글로벌 특허 관리 시스템(IPAZON)과 연차료 납부 서비스 간 데이터 연동 기획 및 운영 고도화를 리딩했습니다. 이어 고객사(한국타이어) 시스템이 연차료 업무를 직접 주고받도록 5단계 연계 프로세스와 API 7종의 요청·응답 규격을 정의했고, 기준이 없던 이슈 트래킹(ITS) 프로세스를 체계화했습니다.",
     metrics: [
-      { value: "40", unit: "+단계", label: "API 연동 프로세스 세분화" },
-      { value: "100", unit: "%", label: "수행계획 대비 기획 구현율" },
+      { value: "40", unit: "+단계", label: "IPAZON 연동 프로세스 세분화" },
+      { value: "7", unit: "종", label: "고객사 연계 API 규격 정의" },
       { value: "90", unit: "%", label: "VOC 대응 일정 준수율" },
     ],
     problem: [
       "IPAZON과 연차료 서비스 간 상태값 불일치·결제 누락 위험",
+      "고객사와 메일·엑셀로 오가던 접수 → 안내 → 회신 → 청구 업무",
       "서비스 오픈 후 쏟아지는 VOC를 처리할 이슈 트래킹 기준 부재",
     ],
     approach: [
       "비즈니스 요건을 40단계 이상 플로우로 세분화, 상태값(Status) 매핑 설계",
-      "API 전송 실패 시 처리 중단·실패 알림 등 엣지 케이스 방어 정책 수립",
+      "고객사 API는 실제 업무 순서 그대로 5단계로 나누고 응답 코드 · 부분 성공 · 상태 조건 등 실패 응답부터 정의",
       "Google Sheets + MantisBT 기반 ITS 파이프라인, 비즈니스 임팩트 기준 우선순위",
     ],
     result: [
       "수행계획 대비 기획 구현율 100%, VOC 대응 일정 준수율 90%",
+      "고객사 연계 규격 v1.0 초안 공동 작성 → 개발 담당과 v1.14까지 확정",
       "환율 DB 갱신 시점과 API 호출 시점 차이 등 근본 원인을 찾아 개발팀과 해결",
     ],
+    flow: {
+      title: "Customer API · 한국타이어 연계 (2026.06 – 08)",
+      left: "한국타이어",
+      right: "WIPS 연차료",
+      steps: [
+        { name: "신건 접수", dir: "out", desc: "권리 목록 배열 + 첨부파일, 출원번호 기준 중복 차단 · 고객관리번호 ↔ 권리 ID 매핑 반환" },
+        { name: "접수 확인 (Ack)", dir: "in", desc: "이관 결과 유지 / 반려(중복 · 긴급 · 소멸 · 만료), 청구 단위(사업부)" },
+        { name: "리마인더 · 수신 확인", dir: "in", desc: "국가·연차별 납부 예상금액, 수신 확인은 성공·실패 건을 나눠 응답" },
+        { name: "회신 · 수정", dir: "out", desc: "납부 여부 Y / N — 상태 조건이 맞는 건만 반영" },
+        { name: "청구", dir: "in", desc: "원화 환산 · 최종 청구액, 고객 요청으로 환율 기준일(송금일) 추가" },
+      ],
+      note: "인증 정보 · 엔드포인트 · 실데이터는 보안상 비공개",
+    },
+    highlights: {
+      label: "API Design Principles",
+      items: [
+        { tag: "Response", title: "실패 응답부터 정의", desc: "S01 성공 · S02 부분 성공 · E01 중복 · E03 필수값 누락(항목명 명시) · E04 매칭 없음 · E05 상태 불일치 — 고객사가 코드만 보고 다음 행동을 정할 수 있게." },
+        { tag: "State Gate", title: "상태 조건 게이트", desc: "내부 화면은 ‘리마인더 발송’ 상태만 회신 입력이 되지만, API는 고객 시스템 처리 시차를 고려해 ‘고객 납부지시 수신’까지 허용 — 연차료팀과 합의 후 규격화." },
+        { tag: "Partial", title: "부분 성공을 인정", desc: "여러 건을 한 번에 확인할 때 1건 실패로 전체를 되돌리지 않고, 성공·실패 건수와 실패 ID만 돌려줘 재시도 범위를 최소화." },
+        { tag: "Amount", title: "금액 구조 표준화", desc: "관납료 · 현지대리인 · 윕스 수수료 × 현지 / 발행 / 청구 + 지분율 · VAT → 26개 금액·환율 항목을 하나의 정의표로 통일." },
+      ],
+    },
     shots: [
       { src: "/work/wips-its-flow-blur.webp", caption: "연차료 서비스 이슈처리 프로세스" },
-      { src: "/work/wips-spec1-blur.webp", caption: "화면설계서 — 연동 ON/OFF·실패 알림 정의" },
-      { src: "/work/wips-api-process-blur.webp", caption: "API 연동 프로세스 정의서" },
+      { src: "/work/wips-api-process-blur.webp", caption: "IPAZON API 연동 프로세스 정의서" },
+      { src: "/work/hk-api-insert-blur.webp", caption: "고객사 연계 API 인터페이스 규격서" },
     ],
-    tags: ["B2B 서비스 기획", "API 연동 명세", "ITS 운영 총괄", "데이터 정합성", "예외 케이스 방어"],
+    tags: ["B2B 서비스 기획", "API 규격 설계", "외부 고객사 연동", "ITS 운영 총괄", "데이터 정합성", "예외 케이스 방어"],
     tech: "MantisBT, Google Sheets, MS Excel, PowerPoint",
     confidential: true,
   },

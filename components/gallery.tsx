@@ -25,14 +25,24 @@ const galleryCategories: { id: string; title: string; confidential?: boolean; it
       {
         id: "tm-plan",
         title: "상표 연차료 확장 기획안 (HTML 프로토타입)",
-        images: ["/wips/tm-overview-full.webp", "/wips/tm-process-full.webp", "/wips/tm-issue-full.webp"],
+        images: [
+          "/wips/tm-overview-full.webp", "/wips/tm-process-full.webp", "/wips/tm-issue-full.webp", "/wips/tm-renewal-full.webp",
+          "/wips/tm-poa-full.webp", "/wips/tm-status-full.webp", "/wips/tm-cost-full.webp", "/wips/tm-erd-full.webp",
+        ],
         thumbnail: "/work/tm-overview.webp",
       },
       {
         id: "tm-screens",
-        title: `상표 연차료 화면설계 ${tmScreens.length}종 (화면코드 FID 표시)`,
+        title: `상표 연차료 화면설계 ${tmScreens.filter((s) => !s.src.includes("ERD")).length}종 + ERD (화면코드 FID 표시)`,
         images: tmScreens.map((s) => s.src),
         thumbnail: "/wips/scr-SCH-014.webp",
+        confidential: true,
+      },
+      {
+        id: "hk-api",
+        title: "고객사(한국타이어) 연계 API 인터페이스 규격서",
+        images: ["/work/hk-api-spec-blur.webp", "/work/hk-api-insert-blur.webp", "/work/hk-api-reminder-blur.webp", "/work/hk-api-billing-blur.webp"],
+        thumbnail: "/work/hk-api-insert-blur.webp",
         confidential: true,
       },
       { id: "api", title: "IPAZON 연동 API 프로세스 정의서", images: ["/work/wips-api-process-blur.webp"], thumbnail: "/work/wips-api-process-blur.webp", confidential: true },

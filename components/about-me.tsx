@@ -7,7 +7,7 @@ import { ExternalLink, Mail, Phone, MapPin, Calendar, BookOpen, Award } from 'lu
 import PDFModal from './PDFModal'
 
 const experiences = [
-  { company: '주식회사 윕스 · DX기획팀', period: '2025.07 – 현재', desc: 'IPAZON 연동 기획 · ITS 운영 총괄 · 상표 연차료 확장 단독 기획', current: true },
+  { company: '주식회사 윕스 · DX기획팀', period: '2025.07 – 현재', desc: 'IPAZON 연동 기획 · 한국타이어 고객사 API 규격 · ITS 운영 총괄 · 상표 연차료 확장 단독 기획', current: true },
   { company: '천재교육 · 에듀테크 PM 서비스/콘텐츠 기획자 10기', period: '2024.12 – 2025.07', desc: '현직 교사 UT, 10만 건 학습 데이터 분석 등 실무형 프로젝트 수행' },
   { company: "IT'S TIME · 대학생 연합 IT 동아리 PM", period: '2025.02 – 2025.07', desc: '6인 팀 리딩, Jira 스프린트 운영으로 MVP 출시' },
   { company: '패스트캠퍼스 · EXPORT PM/PO 4기', period: '2024.09 – 2024.12', desc: '시장 조사부터 로드맵·MVP 설계까지 PM/PO 전 과정 실습' },
