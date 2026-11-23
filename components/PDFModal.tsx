@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { X, Loader2, ExternalLink } from "lucide-react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { withBase } from "@/lib/base-path"
 
 interface PDFModalProps {
   isOpen: boolean
@@ -11,7 +12,8 @@ interface PDFModalProps {
   title?: string
 }
 
-export default function PDFModal({ isOpen, onClose, pdfUrl, title }: PDFModalProps) {
+export default function PDFModal({ isOpen, onClose, pdfUrl: rawUrl, title }: PDFModalProps) {
+  const pdfUrl = rawUrl ? withBase(rawUrl) : ""
   const [loaded, setLoaded] = useState(false)
 
   // 다른 문서를 열 때마다 로딩 표시 초기화

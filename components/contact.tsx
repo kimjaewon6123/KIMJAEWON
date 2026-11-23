@@ -4,6 +4,7 @@ import React from "react";
 import { motion, type Variants } from "framer-motion";
 import { FileText, ArrowUpRight } from "lucide-react";
 import { InstagramIcon } from "./icons";
+import { withBase } from "@/lib/base-path";
 
 export default function Contact() {
   const containerVariants = {
@@ -94,7 +95,7 @@ export default function Contact() {
           className="flex flex-wrap justify-center gap-4 md:gap-6"
         >
           <a
-            href="/docs/portfolio.pdf"
+            href={withBase("/docs/portfolio.pdf")}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative flex items-center gap-2 px-8 py-4 rounded-full border border-border bg-transparent overflow-hidden transition-colors"
@@ -107,7 +108,7 @@ export default function Contact() {
           </a>
 
           <a
-            href="/docs/resume.pdf"
+            href={withBase("/docs/resume.pdf")}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative flex items-center gap-2 px-8 py-4 rounded-full border border-border bg-transparent overflow-hidden transition-colors"

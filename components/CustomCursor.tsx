@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { withBase } from "@/lib/base-path"
 
 type CursorType = "default" | "pointer" | "project"
 
@@ -114,7 +115,7 @@ export default function CustomCursor() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={imageRef}
-        src="/mouse.png"
+        src={withBase("/mouse.png")}
         alt=""
         className="animate-float-butterfly h-full w-full object-contain"
         style={{ transition: "transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), filter 0.3s" }}

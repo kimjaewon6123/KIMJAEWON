@@ -5,6 +5,7 @@ import Image from "next/image"
 import { motion, AnimatePresence, useSpring } from "framer-motion"
 import { FileText, ArrowUpRight, Plus, Lock } from "lucide-react"
 import PDFModal from "./PDFModal"
+import { withBase } from "@/lib/base-path"
 import { GithubIcon } from "./icons"
 import { projects, type Project, type Shot } from "@/lib/projects"
 
@@ -297,7 +298,7 @@ function CaseStudy({ project: p, onOpenPdf }: { project: Project; onOpenPdf: (ur
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               {p.shots.map((s) => (
                 <figure key={s.src}>
-                  <a href={s.full ?? s.src} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-xl bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
+                  <a href={withBase(s.full ?? s.src)} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-xl bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
                     <div className="relative aspect-[16/10]">
                       <Image src={s.src} alt={s.caption} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover object-top transition-transform duration-700 group-hover/shot:scale-105" />
                     </div>
@@ -320,7 +321,7 @@ function CaseStudy({ project: p, onOpenPdf }: { project: Project; onOpenPdf: (ur
           <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-5">
             {p.screens.map((s) => (
               <figure key={s.src}>
-                <a href={s.src} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-lg bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
+                <a href={withBase(s.src)} target="_blank" rel="noopener noreferrer" className="group/shot block overflow-hidden rounded-lg bg-white ring-1 ring-foreground/10" onClick={(e) => e.stopPropagation()}>
                   <div className="relative aspect-[16/10]">
                     <Image src={s.src} alt={s.caption} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover object-top transition-transform duration-700 group-hover/shot:scale-105" />
                   </div>

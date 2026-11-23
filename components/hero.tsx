@@ -4,6 +4,7 @@ import { useRef } from "react"
 import Image from "next/image"
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { ArrowDown } from "lucide-react"
+import { withBase } from "@/lib/base-path"
 
 const titleLines = ["변화하는 기술을 빠르게 흡수하고,", "현실적인 해결책으로 이어내는 기획자"]
 const nameWords = ["KIM", "JAE", "WON"]
@@ -106,7 +107,7 @@ export default function Hero({ ready = true }: { ready?: boolean }) {
                 프로젝트 보기
                 <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
               </a>
-              <a href="/docs/portfolio.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-foreground/25 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/10">
+              <a href={withBase("/docs/portfolio.pdf")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-foreground/25 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/10">
                 포트폴리오 PDF
               </a>
               <span className="ml-2 hidden items-center gap-3 text-sm font-medium uppercase tracking-wider text-foreground/40 sm:flex">
